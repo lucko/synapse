@@ -14,7 +14,7 @@ import me.lucko.synapse.context.ContextService;
 import me.lucko.synapse.permission.PermissionService;
 import me.lucko.synapse.permission.membership.GroupMembership;
 import me.lucko.synapse.permission.node.PermissionNode;
-import me.lucko.synapse.permission.options.Property;
+import me.lucko.synapse.permission.property.Property;
 import me.lucko.synapse.permission.subject.Group;
 import me.lucko.synapse.permission.subject.User;
 import org.bukkit.GameMode;

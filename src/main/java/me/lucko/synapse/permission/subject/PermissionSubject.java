@@ -27,7 +27,7 @@ package me.lucko.synapse.permission.subject;
 
 import me.lucko.synapse.permission.membership.GroupMembership;
 import me.lucko.synapse.permission.node.PermissionNode;
-import me.lucko.synapse.permission.options.PropertyBuilder;
+import me.lucko.synapse.permission.property.PropertyBuilder;
 import me.lucko.synapse.util.FutureAction;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;

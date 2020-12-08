@@ -23,32 +23,33 @@
  *  SOFTWARE.
  */
 
-package me.lucko.synapse.permission.options;
+package me.lucko.synapse.permission.property;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.Map;
+final class PropertyImpl<T> implements Property<T> {
+    private final String name;
+    private final T defaultValue;
 
-/**
- * Represents an object which has {@link Property properties}.
- */
-public interface PropertyQueryable {
+    PropertyImpl(String name, T defaultValue) {
+        this.name = name;
+        this.defaultValue = defaultValue;
+    }
 
-    /**
-     * Gets the properties this object has.
-     *
-     * @return the properties
-     */
-    @NonNull Map<Property<?>, Object> properties();
+    @Override
+    public @NonNull String name() {
+        return this.name;
+    }
 
-    /**
-     * Queries for a given property.
-     *
-     * @param property the property
-     * @param <T> the property type
-     * @return the value, or the default if it is not set
-     */
-    <T> @Nullable T queryProperty(@NonNull Property<T> property);
+    @Override
+    public T defaultValue() {
+        return this.defaultValue;
+    }
 
+    @Override
+    public String toString() {
+        return "Property{name=" + name +", defaultValue=" + defaultValue + '}';
+    }
+
+    // use system equality for #equals and #hashcode
 }

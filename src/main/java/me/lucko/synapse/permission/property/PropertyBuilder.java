@@ -23,7 +23,7 @@
  *  SOFTWARE.
  */
 
-package me.lucko.synapse.permission.options;
+package me.lucko.synapse.permission.property;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

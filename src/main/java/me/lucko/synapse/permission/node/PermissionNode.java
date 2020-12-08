@@ -25,7 +25,7 @@
 
 package me.lucko.synapse.permission.node;
 
-import me.lucko.synapse.permission.options.PropertyQueryable;
+import me.lucko.synapse.permission.property.PropertyQueryable;
 
 /**
  * Represents a permission

@@ -25,7 +25,7 @@
 
 package me.lucko.synapse.permission.membership;
 
-import me.lucko.synapse.permission.options.PropertyQueryable;
+import me.lucko.synapse.permission.property.PropertyQueryable;
 import me.lucko.synapse.permission.subject.Group;
 
 /**

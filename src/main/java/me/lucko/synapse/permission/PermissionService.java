@@ -26,7 +26,7 @@
 package me.lucko.synapse.permission;
 
 import me.lucko.synapse.GenericService;
-import me.lucko.synapse.permission.options.Property;
+import me.lucko.synapse.permission.property.Property;
 import me.lucko.synapse.permission.subject.Group;
 import me.lucko.synapse.permission.subject.User;
 import me.lucko.synapse.util.FutureResult;
@@ -133,6 +133,12 @@ public interface PermissionService extends GenericService {
         @NonNull FutureResult<Group> load(@NonNull String name);
     }
 
+    /**
+     * Gets if the service supports the property.
+     *
+     * @param property the property
+     * @return if the service supports the property
+     */
     boolean supportsProperty(@NonNull Property<?> property);
 
 }
