@@ -25,14 +25,12 @@
 
 package me.lucko.synapse.permission.node;
 
-import me.lucko.synapse.permission.context.Context;
-
-import java.util.Set;
+import me.lucko.synapse.permission.options.PropertyQueryable;
 
 /**
  * Represents a permission
  */
-public interface PermissionNode {
+public interface PermissionNode extends PropertyQueryable {
 
     /**
      * Gets the string value of the permission
@@ -40,22 +38,5 @@ public interface PermissionNode {
      * @return the permission string
      */
     String getPermission();
-
-    /**
-     * Gets the value of the permission.
-     *
-     * <p>This will return <code>false</code> if the permission node is
-     * "negated", and true otherwise.</p>
-     *
-     * @return the value of the permission
-     */
-    boolean getValue();
-
-    /**
-     * Gets the contexts required for this permission node to apply.
-     *
-     * @return the context required for this permission to apply
-     */
-    Set<Context> getRequiredContext();
 
 }

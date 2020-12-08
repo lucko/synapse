@@ -25,17 +25,13 @@
 
 package me.lucko.synapse.permission.subject;
 
+import me.lucko.synapse.permission.options.PropertyBuilder;
 import me.lucko.synapse.util.FutureAction;
-import me.lucko.synapse.permission.PermissionService;
-import me.lucko.synapse.permission.context.Context;
-import me.lucko.synapse.permission.options.SetOptions;
-
 import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 /**
  * Represents an object which can hold prefixes, suffixes and metadata.
@@ -48,26 +44,9 @@ public interface MetadataSubject {
      * <p>If the permission plugin supports it, this method should account for
      * inherited data too.</p>
      *
-     * <p>This method will retrieve a prefix according to the subjects
-     * "current context". If you want to get a prefix in a specific context,
-     * use {@link #getPrefix(Set)}.</p>
-     *
      * @return the value of the subjects prefix
      */
-    @Nullable
-    String getPrefix();
-
-    /**
-     * Gets the subjects prefix value.
-     *
-     * <p>If the permission plugin supports it, this method should account for
-     * inherited data too.</p>
-     *
-     * @param contexts the contexts to lookup in
-     * @return the value of the subjects prefix
-     */
-    @Nullable
-    String getPrefix(@Nonnull Set<Context> contexts);
+    @Nullable String getPrefix();
 
     /**
      * Gets the subjects suffix value.
@@ -75,42 +54,9 @@ public interface MetadataSubject {
      * <p>If the permission plugin supports it, this method should account for
      * inherited data too.</p>
      *
-     * <p>This method will retrieve a suffix according to the subjects
-     * "current context". If you want to get a suffix in a specific context,
-     * use {@link #getSuffix(Set)}.</p>
-     *
      * @return the value of the subjects suffix
      */
-    @Nullable
-    String getSuffix();
-
-    /**
-     * Gets the subjects suffix value.
-     *
-     * <p>If the permission plugin supports it, this method should account for
-     * inherited data too.</p>
-     *
-     * @param contexts the contexts to lookup in
-     * @return the value of the subjects suffix
-     */
-    @Nullable
-    String getSuffix(@Nonnull Set<Context> contexts);
-
-    /**
-     * Gets the meta value corresponding to the given key for the subject.
-     *
-     * <p>If the permission plugin supports it, this method should account for
-     * inherited data too.</p>
-     *
-     * <p>This method will retrieve a value according to the subjects
-     * "current context". If you want to get a value in a specific context,
-     * use {@link #getMetadata(String, Set)}.</p>
-     *
-     * @param key the key
-     * @return the value for the key
-     */
-    @Nullable
-    String getMetadata(@Nonnull String key);
+    @Nullable String getSuffix();
 
     /**
      * Gets the meta value corresponding to the given key for the subject.
@@ -119,18 +65,15 @@ public interface MetadataSubject {
      * inherited data too.</p>
      *
      * @param key the key
-     * @param contexts the contexts to lookup in
      * @return the value for the key
      */
-    @Nullable
-    String getMetadata(@Nonnull String key, @Nonnull Set<Context> contexts);
+    @Nullable String getMetadata(@NonNull String key);
 
     /**
      * Sets a prefix for the subject.
      *
      * <p>Calling this method is equivalent to calling
-     * {@link #setPrefix(String, SetOptions)} with
-     * {@link PermissionService#getNormalSetOptions()}.</p>
+     * {@link #setPrefix(String, Consumer)} without setting any extra properties.</p>
      *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
@@ -140,14 +83,12 @@ public interface MetadataSubject {
      * @param prefix the prefix to set, or null to remove any current prefix
      * @return a future result
      */
-    @Nonnull
-    FutureAction setPrefix(@Nullable String prefix);
+    default @NonNull FutureAction setPrefix(@Nullable String prefix) {
+        return this.setPrefix(prefix, props -> {});
+    }
 
     /**
-     * Sets a prefix for the subject with defined options.
-     *
-     * <p>A {@link SetOptions} instance can be obtained and modified using
-     * {@link PermissionService#getNormalSetOptions()}</p>
+     * Sets a prefix for the subject with extra properties.
      *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
@@ -155,18 +96,16 @@ public interface MetadataSubject {
      * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
      *
      * @param prefix the prefix to set, or null to remove any current prefix
-     * @param options the options to set the prefix with
+     * @param properties the properties to set the prefix with
      * @return a future result
      */
-    @Nonnull
-    FutureAction setPrefix(@Nullable String prefix, @Nonnull SetOptions options);
+    @NonNull FutureAction setPrefix(@Nullable String prefix, @NonNull Consumer<PropertyBuilder> properties);
 
     /**
      * Sets a suffix for the subject.
      *
      * <p>Calling this method is equivalent to calling
-     * {@link #setSuffix(String, SetOptions)} with
-     * {@link PermissionService#getNormalSetOptions()}.</p>
+     * {@link #setSuffix(String, Consumer)} without setting any extra properties.</p>
      *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
@@ -176,14 +115,12 @@ public interface MetadataSubject {
      * @param suffix the suffix to set, or null to remove any current suffix
      * @return a future result
      */
-    @Nonnull
-    FutureAction setSuffix(@Nullable String suffix);
+    default @NonNull FutureAction setSuffix(@Nullable String suffix) {
+        return this.setSuffix(suffix, props -> {});
+    }
 
     /**
-     * Sets a suffix for the subject with defined options.
-     *
-     * <p>A {@link SetOptions} instance can be obtained and modified using
-     * {@link PermissionService#getNormalSetOptions()}</p>
+     * Sets a suffix for the subject with extra properties.
      *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
@@ -191,18 +128,16 @@ public interface MetadataSubject {
      * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
      *
      * @param suffix the suffix to set, or null to remove any current suffix
-     * @param options the options to set the suffix with
+     * @param properties the properties to set the suffix with
      * @return a future result
      */
-    @Nonnull
-    FutureAction setSuffix(@Nullable String suffix, @Nonnull SetOptions options);
+    @NonNull FutureAction setSuffix(@Nullable String suffix, @NonNull Consumer<PropertyBuilder> properties);
 
     /**
      * Sets a metadata value for the subject.
      *
      * <p>Calling this method is equivalent to calling
-     * {@link #setMetadata(String, String, SetOptions)} with
-     * {@link PermissionService#getNormalSetOptions()}.</p>
+     * {@link #setMetadata(String, String, Consumer)} without setting any extra properties.</p>
      *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
@@ -213,14 +148,12 @@ public interface MetadataSubject {
      * @param value the value
      * @return a future result
      */
-    @Nonnull
-    FutureAction setMetadata(@Nonnull String key, @Nullable String value);
+    default @NonNull FutureAction setMetadata(@NonNull String key, @Nullable String value) {
+        return this.setMetadata(key, value, props -> {});
+    }
 
     /**
-     * Sets a metadata value for the subject with defined options.
-     *
-     * <p>A {@link SetOptions} instance can be obtained and modified using
-     * {@link PermissionService#getNormalSetOptions()}</p>
+     * Sets a metadata value for the subject with extra properties.
      *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
@@ -229,10 +162,9 @@ public interface MetadataSubject {
      *
      * @param key the metadata key
      * @param value the value
-     * @param options the options to set the value with
+     * @param properties the properties to set the value with
      * @return a future result
      */
-    @Nonnull
-    FutureAction setMetadata(@Nonnull String key, @Nullable String value, @Nonnull SetOptions options);
+    @NonNull FutureAction setMetadata(@NonNull String key, @Nullable String value, @NonNull Consumer<PropertyBuilder> properties);
 
 }

@@ -23,43 +23,48 @@
  *  SOFTWARE.
  */
 
-package me.lucko.synapse.util;
+package me.lucko.synapse.permission.options;
 
-import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.concurrent.CompletableFuture;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * Represents the result of an action which may have no yet been fully applied.
+ * A builder for {@link Property properties}.
  */
-public interface FutureAction {
+public interface PropertyBuilder {
 
     /**
-     * Attaches a completion callback to this {@link FutureAction}.
+     * Gets if the given property is supported.
      *
-     * <p>If the action is already complete, the runnable will be called immediately.</p>
-     *
-     * <p>If it is not complete, the runnable will be called synchronously using
-     * the Bukkit scheduler when the action is completed.</p>
-     *
-     * @param plugin a plugin instance to use when running the callback
-     * @param runnable the runnable
+     * @param property the property
+     * @return true if the property is supported, false otherwise
      */
-    void whenComplete(@NonNull Plugin plugin, @NonNull Runnable runnable);
+    boolean supports(@NonNull Property<?> property);
 
     /**
-     * Blocks the current thread until the action has completed.
+     * Sets the given property.
      *
-     * <p>This method should only be called from an async task!</p>
+     * @param property the property
+     * @param value the property value
+     * @param <T> the property value type
+     * @return this builder
+     * @throws UnsupportedOperationException if the property is not supported
      */
-    void join();
+    default <T> @NonNull PropertyBuilder with(@NonNull Property<T> property, @Nullable T value) throws UnsupportedOperationException {
+        if (!this.supports(property)) {
+            throw new UnsupportedOperationException(this.toString() + " does not support the " + property.name() + " property!");
+        }
+        return this.withIfSupported(property, value);
+    }
 
     /**
-     * Encapsulates this {@link FutureAction} as a {@link CompletableFuture}.
+     * Sets the given property, without throwing an exception if the property is not supported.
      *
-     * @return a future
+     * @param property the property
+     * @param value the property value
+     * @param <T> the property value type
+     * @return this builder
      */
-    @NonNull CompletableFuture<Void> asFuture();
+    <T> @NonNull PropertyBuilder withIfSupported(@NonNull Property<T> property, @Nullable T value);
 
 }

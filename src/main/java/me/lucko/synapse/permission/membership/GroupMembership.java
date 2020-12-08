@@ -25,15 +25,13 @@
 
 package me.lucko.synapse.permission.membership;
 
-import me.lucko.synapse.permission.context.Context;
+import me.lucko.synapse.permission.options.PropertyQueryable;
 import me.lucko.synapse.permission.subject.Group;
-
-import java.util.Set;
 
 /**
  * Represents a group membership
  */
-public interface GroupMembership {
+public interface GroupMembership extends PropertyQueryable {
 
     /**
      * Gets the group.
@@ -41,12 +39,5 @@ public interface GroupMembership {
      * @return the group
      */
     Group getGroup();
-
-    /**
-     * Gets the contexts required for this group membership to apply.
-     *
-     * @return the context required for this group membership to apply
-     */
-    Set<Context> getRequiredContext();
 
 }

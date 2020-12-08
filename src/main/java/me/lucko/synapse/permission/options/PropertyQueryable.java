@@ -23,10 +23,32 @@
  *  SOFTWARE.
  */
 
-package me.lucko.synapse.util;
+package me.lucko.synapse.permission.options;
 
-public interface FutureCallback<T> {
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-    void accept(T t);
+import java.util.Map;
+
+/**
+ * Represents an object which has {@link Property properties}.
+ */
+public interface PropertyQueryable {
+
+    /**
+     * Gets the properties this object has.
+     *
+     * @return the properties
+     */
+    @NonNull Map<Property<?>, Object> properties();
+
+    /**
+     * Queries for a given property.
+     *
+     * @param property the property
+     * @param <T> the property type
+     * @return the value, or the default if it is not set
+     */
+    <T> @Nullable T queryProperty(@NonNull Property<T> property);
 
 }

@@ -23,19 +23,44 @@
  *  SOFTWARE.
  */
 
-package me.lucko.synapse.permission.node;
+package me.lucko.synapse.context;
 
-/**
- * Represents a {@link PermissionNode} that will expire.
- */
-public interface ExpiringPermissionNode extends PermissionNode {
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-    /**
-     * Gets the time when this permission node will expire,
-     * as a unix timestamp in milliseconds.
-     *
-     * @return the expiry time of this permission node
-     */
-    long getExpiryTime();
+final class ContextImpl implements Context {
+    private final String key;
+    private final String value;
 
+    ContextImpl(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    @Override
+    public @NonNull String key() {
+        return this.key;
+    }
+
+    @Override
+    public @NonNull String value() {
+        return this.value;
+    }
+
+    @Override
+    public String toString() {
+        return this.key + '=' + this.value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Context)) return false;
+        Context that = (ContextImpl) o;
+        return this.key.equals(that.key()) && this.value.equals(that.value());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.key.hashCode() ^ this.value.hashCode();
+    }
 }

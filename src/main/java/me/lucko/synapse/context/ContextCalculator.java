@@ -23,43 +23,32 @@
  *  SOFTWARE.
  */
 
-package me.lucko.synapse.util;
+package me.lucko.synapse.context;
 
-import org.bukkit.plugin.Plugin;
+import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
- * Represents the result of an action which may have no yet been fully applied.
+ * An object that calculates values for a given context.
  */
-public interface FutureAction {
+public interface ContextCalculator {
 
     /**
-     * Attaches a completion callback to this {@link FutureAction}.
+     * Calculates the context values that currently apply to the given player.
      *
-     * <p>If the action is already complete, the runnable will be called immediately.</p>
-     *
-     * <p>If it is not complete, the runnable will be called synchronously using
-     * the Bukkit scheduler when the action is completed.</p>
-     *
-     * @param plugin a plugin instance to use when running the callback
-     * @param runnable the runnable
+     * @param target the player
+     * @param consumer the consumer to submit results to
      */
-    void whenComplete(@NonNull Plugin plugin, @NonNull Runnable runnable);
+    void calculate(@NonNull Player target, @NonNull Consumer<String> consumer);
 
     /**
-     * Blocks the current thread until the action has completed.
+     * Gets the known possible values for the context.
      *
-     * <p>This method should only be called from an async task!</p>
+     * @return the possible values
      */
-    void join();
-
-    /**
-     * Encapsulates this {@link FutureAction} as a {@link CompletableFuture}.
-     *
-     * @return a future
-     */
-    @NonNull CompletableFuture<Void> asFuture();
+    @NonNull Collection<String> possibleValues();
 
 }

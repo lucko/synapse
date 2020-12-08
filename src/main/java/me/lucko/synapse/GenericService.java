@@ -25,7 +25,7 @@
 
 package me.lucko.synapse;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A generic service interface
@@ -33,11 +33,10 @@ import javax.annotation.Nonnull;
 public interface GenericService {
 
     /**
-     * Gets the name of the plugin providing the service.
+     * Gets the name of the service provider.
      *
      * @return the name of the provider
      */
-    @Nonnull
-    String getProviderName();
+    @NonNull String getProviderName();
 
 }

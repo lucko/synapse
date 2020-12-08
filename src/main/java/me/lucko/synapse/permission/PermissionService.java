@@ -26,20 +26,16 @@
 package me.lucko.synapse.permission;
 
 import me.lucko.synapse.GenericService;
-import me.lucko.synapse.permission.context.Context;
-import me.lucko.synapse.permission.options.SetOptions;
-import me.lucko.synapse.permission.options.UnsetOptions;
+import me.lucko.synapse.permission.options.Property;
 import me.lucko.synapse.permission.subject.Group;
 import me.lucko.synapse.permission.subject.User;
 import me.lucko.synapse.util.FutureResult;
-
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Collection;
 import java.util.UUID;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * A service to interface with Bukkit permission plugins.
@@ -47,104 +43,96 @@ import javax.annotation.Nullable;
 public interface PermissionService extends GenericService {
 
     /**
-     * Gets a {@link User} instance for an online player.
+     * Gets the users collection.
      *
-     * <p>May throw an exception if the player is {@link Player#isOnline() not
-     * online}.</p>
-     *
-     * <p>Permission plugins will <b>always</b> return a result for online
-     * players.</p>
-     *
-     * @param player the player
-     * @return a user
+     * @return the users
      */
-    @Nonnull
-    User getUser(@Nonnull Player player);
+    @NonNull Users users();
 
     /**
-     * Gets a {@link User} instance for a given unique id.
-     *
-     * <p>Permission plugins will <b>always</b> return a result for online
-     * players, and <b>may</b> return a result of offline players.</p>
-     *
-     * @param uniqueId the unique id of the player to lookup
-     * @return a user, or null if one could not be retrieved
-     * @see Player#getUniqueId()
+     * Object responsible for providing {@link User}s.
      */
-    @Nullable
-    User getUser(@Nonnull UUID uniqueId);
+    interface Users {
+        /**
+         * Gets a {@link User} instance for an online player.
+         *
+         * <p>May throw an exception if the player is {@link Player#isOnline() not
+         * online}.</p>
+         *
+         * <p>Permission plugins will <b>always</b> return a result for online
+         * players.</p>
+         *
+         * @param player the player
+         * @return a user
+         */
+        @NonNull User get(@NonNull Player player);
+
+        /**
+         * Gets a {@link User} instance for a given unique id.
+         *
+         * <p>Permission plugins will <b>always</b> return a result for online
+         * players, and <b>may</b> return a result of offline players.</p>
+         *
+         * @param uniqueId the unique id of the player to lookup
+         * @return a user, or null if one could not be retrieved
+         * @see Player#getUniqueId()
+         */
+        @Nullable User get(@NonNull UUID uniqueId);
+
+        /**
+         * Makes a request to load a user, and then passes the result of the lookup
+         * to the given {@link FutureResult}.
+         *
+         * <p>In some cases, a database lookup may be required to retrieve the
+         * necessary data.</p>
+         *
+         * @param uniqueId the unique id of the player to lookup
+         * @return the future result encapsulating the request
+         */
+        @NonNull FutureResult<User> load(@NonNull UUID uniqueId);
+    }
 
     /**
-     * Makes a request to load a user, and then passes the result of the lookup
-     * to the given {@link FutureResult}.
+     * Gets the groups collection.
      *
-     * <p>In some cases, a database lookup may be required to retrieve the
-     * necessary data.</p>
-     *
-     * @param uniqueId the unique id of the player to lookup
-     * @return the future result encapsulating the request
+     * @return the groups
      */
-    @Nonnull
-    FutureResult<User> loadUser(@Nonnull UUID uniqueId);
+    @NonNull Groups groups();
 
     /**
-     * Gets a collection of all groups known to the permission plugin.
-     *
-     * <p>The returned collection is immutable and will not update live.</p>
-     *
-     * @return a collection of known groups
+     * Object responsible for providing {@link Group}s.
      */
-    @Nonnull
-    Collection<Group> getGroups();
+    interface Groups {
+        /**
+         * Gets a collection of all groups known to the permission plugin.
+         *
+         * <p>The returned collection is immutable and will not update live.</p>
+         *
+         * @return a collection of known groups
+         */
+        @NonNull Collection<Group> all();
 
-    /**
-     * Gets a group by name.
-     *
-     * @param name the name of the group
-     * @return the group, if present
-     */
-    @Nullable
-    Group getGroup(@Nonnull String name);
+        /**
+         * Gets a group by name.
+         *
+         * @param name the name of the group
+         * @return the group, if present
+         */
+        @Nullable Group get(@NonNull String name);
 
-    /**
-     * Gets the {@link SetOptions} normally used by the plugin.
-     *
-     * @return the normal set options
-     */
-    @Nonnull
-    SetOptions getNormalSetOptions();
+        /**
+         * Makes a request to load a group, and then passes the result of the lookup
+         * to the given {@link FutureResult}.
+         *
+         * <p>In some cases, a database lookup may be required to retrieve the
+         * necessary data.</p>
+         *
+         * @param name the name of the group
+         * @return the future result encapsulating the request
+         */
+        @NonNull FutureResult<Group> load(@NonNull String name);
+    }
 
-    /**
-     * Gets the {@link UnsetOptions} normally used by the plugin.
-     *
-     * @return the normal unset options
-     */
-    @Nonnull
-    UnsetOptions getNormalUnsetOptions();
-
-    /**
-     * Gets if the permission plugin supports contexts of a given type.
-     *
-     * <p>Note that most plugins support the {@link Context#WORLD_KEY} as a
-     * minimum.</p>
-     *
-     * @param key the context key
-     * @return true if the permission plugin supports the context
-     */
-    boolean supportsContextType(@Nonnull String key);
-
-    /**
-     * Creates a context instance for use with this {@link PermissionService}.
-     *
-     * <p>Will throw a {@link IllegalArgumentException} if this
-     * {@link PermissionService} does not support the given context key.</p>
-     *
-     * @param key the context key
-     * @param value the context value
-     * @return a context instance
-     * @throws IllegalArgumentException if the service doesn't support the given context
-     */
-    @Nonnull
-    Context createContext(@Nonnull String key, @Nonnull String value) throws IllegalArgumentException;
+    boolean supportsProperty(@NonNull Property<?> property);
 
 }

@@ -26,20 +26,15 @@
 package me.lucko.synapse.permission.subject;
 
 import me.lucko.synapse.permission.membership.GroupMembership;
-import me.lucko.synapse.util.FutureAction;
-import me.lucko.synapse.permission.PermissionService;
-import me.lucko.synapse.permission.context.Context;
 import me.lucko.synapse.permission.node.PermissionNode;
-import me.lucko.synapse.permission.options.SetOptions;
-import me.lucko.synapse.permission.options.UnsetOptions;
-
+import me.lucko.synapse.permission.options.PropertyBuilder;
+import me.lucko.synapse.util.FutureAction;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collection;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
 /**
  * Represents an object which can hold permissions and inherit from groups.
@@ -56,8 +51,7 @@ public interface PermissionSubject {
      *
      * @return the permissions this subject has
      */
-    @Nonnull
-    Collection<PermissionNode> getPermissions();
+    @NonNull Collection<PermissionNode> getPermissions();
 
     /**
      * Gets the groups this subject inherits from.
@@ -69,8 +63,7 @@ public interface PermissionSubject {
      *
      * @return the groups this subject has
      */
-    @Nonnull
-    Collection<GroupMembership> getGroups();
+    @NonNull Collection<GroupMembership> getGroups();
 
     /**
      * Runs a permission check on the subject.
@@ -82,33 +75,16 @@ public interface PermissionSubject {
      * {@link Permissible#hasPermission(String)}, and return the same result in
      * most cases.</p>
      *
-     * <p>As such, this method will check according to the subjects
-     * "current context". If you want to check in a specific context,
-     * use {@link #checkPermission(String, Set)}.</p>
-     *
      * @param permission the permission
      * @return the result of the check
      */
-    boolean checkPermission(@Nonnull String permission);
-
-    /**
-     * Runs a permission check on the subject.
-     *
-     * <p>Unlike all other methods in this interface, this method <b>should</b>
-     * account for inheritance rules.</p>
-     *
-     * @param permission the permission
-     * @param contexts the contexts to run the check in
-     * @return the result of the check
-     */
-    boolean checkPermission(@Nonnull String permission, @Nonnull Set<Context> contexts);
+    boolean checkPermission(@NonNull String permission);
 
     /**
      * Sets a permission for the subject.
      *
      * <p>Calling this method is equivalent to calling
-     * {@link #setPermission(String, SetOptions)} with
-     * {@link PermissionService#getNormalSetOptions()}.</p>
+     * {@link #setPermission(String, Consumer)} without setting any extra properties.</p>
      *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
@@ -118,14 +94,12 @@ public interface PermissionSubject {
      * @param permission the permission
      * @return a future result
      */
-    @Nonnull
-    FutureAction setPermission(@Nonnull String permission);
+    default @NonNull FutureAction setPermission(@NonNull String permission) {
+        return this.setPermission(permission, props -> {});
+    }
 
     /**
-     * Sets a permission for the subject with defined options.
-     *
-     * <p>A {@link SetOptions} instance can be obtained and modified using
-     * {@link PermissionService#getNormalSetOptions()}</p>
+     * Sets a permission for the subject with extra properties.
      *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
@@ -133,19 +107,14 @@ public interface PermissionSubject {
      * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
      *
      * @param permission the permission
-     * @param options the options to set the permission with
+     * @param properties the properties to set the permission with
      * @return a future result
      */
-    @Nonnull
-    FutureAction setPermission(@Nonnull String permission, @Nonnull SetOptions options);
+    @NonNull FutureAction setPermission(@NonNull String permission, @NonNull Consumer<PropertyBuilder> properties);
 
     /**
      * Unsets a permission for the subject.
      *
-     * <p>Calling this method is equivalent to calling
-     * {@link #unsetPermission(String, UnsetOptions)} with
-     * {@link PermissionService#getNormalUnsetOptions()}.</p>
-     *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
@@ -154,34 +123,14 @@ public interface PermissionSubject {
      * @param permission the permission
      * @return a future result
      */
-    @Nonnull
-    FutureAction unsetPermission(@Nonnull String permission);
-
-    /**
-     * Unsets a permission for the subject with defined options.
-     *
-     * <p>A {@link UnsetOptions} instance can be obtained and modified using
-     * {@link PermissionService#getNormalUnsetOptions()}</p>
-     *
-     * <p>The result of this action may not apply immediately, and the change
-     * may be applied asynchronously. If you want to wait until the action has
-     * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
-     *
-     * @param permission the permission
-     * @param options the options to unset the permission with
-     * @return a future result
-     */
-    @Nonnull
-    FutureAction unsetPermission(@Nonnull String permission, @Nonnull UnsetOptions options);
+    @NonNull FutureAction unsetPermission(@NonNull PermissionNode permission);
 
     /**
      * Adds a group to the subject (makes the subject inherit permissions
      * and other groups from it).
      *
      * <p>Calling this method is equivalent to calling
-     * {@link #addGroup(Group, SetOptions)} with
-     * {@link PermissionService#getNormalSetOptions()}.</p>
+     * {@link #addGroup(Group, Consumer)} without setting any extra properties.</p>
      *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
@@ -191,15 +140,13 @@ public interface PermissionSubject {
      * @param group the group
      * @return a future result
      */
-    @Nonnull
-    FutureAction addGroup(@Nonnull Group group);
+    default @NonNull FutureAction addGroup(@NonNull Group group) {
+        return this.addGroup(group, props -> {});
+    }
 
     /**
      * Adds a group to the subject (makes the subject inherit permissions
-     * and other groups from it) with defined options.
-     *
-     * <p>A {@link SetOptions} instance can be obtained and modified using
-     * {@link PermissionService#getNormalSetOptions()}</p>
+     * and other groups from it) with extra properties.
      *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
@@ -207,19 +154,14 @@ public interface PermissionSubject {
      * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
      *
      * @param group the group
-     * @param options the options to add the group with
+     * @param properties the properties to add the group with
      * @return a future result
      */
-    @Nonnull
-    FutureAction addGroup(@Nonnull Group group, @Nonnull SetOptions options);
+    @NonNull FutureAction addGroup(@NonNull Group group, @NonNull Consumer<PropertyBuilder> properties);
 
     /**
      * Removes a group from the subject.
      *
-     * <p>Calling this method is equivalent to calling
-     * {@link #unsetPermission(String, UnsetOptions)} with
-     * {@link PermissionService#getNormalUnsetOptions()}.</p>
-     *
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
@@ -228,25 +170,6 @@ public interface PermissionSubject {
      * @param group the group
      * @return a future result
      */
-    @Nonnull
-    FutureAction removeGroup(@Nonnull Group group);
-
-    /**
-     * Removes a group from the subject with defined options.
-     *
-     * <p>A {@link UnsetOptions} instance can be obtained and modified using
-     * {@link PermissionService#getNormalUnsetOptions()}</p>
-     *
-     * <p>The result of this action may not apply immediately, and the change
-     * may be applied asynchronously. If you want to wait until the action has
-     * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
-     *
-     * @param group the group
-     * @param options the options to unset the permission with
-     * @return a future result
-     */
-    @Nonnull
-    FutureAction removeGroup(@Nonnull Group group, @Nonnull UnsetOptions options);
+    @NonNull FutureAction removeGroup(@NonNull GroupMembership group);
 
 }

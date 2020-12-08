@@ -23,19 +23,41 @@
  *  SOFTWARE.
  */
 
-package me.lucko.synapse.permission.membership;
+package me.lucko.synapse.context;
+
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Set;
 
 /**
- * Represents a {@link GroupMembership} that will expire.
+ * A service for contexts.
  */
-public interface ExpiringGroupMembership extends GroupMembership {
+public interface ContextService {
 
     /**
-     * Gets the time when this group membership will expire,
-     * as a unix timestamp in milliseconds.
+     * Registers a context.
      *
-     * @return the expiry time of this group membership
+     * @param plugin the plugin registering
+     * @param key the context key
+     * @param calculator a calculator for the context
      */
-    long getExpiryTime();
+    void registerContext(@NonNull Plugin plugin, @NonNull String key, @NonNull ContextCalculator calculator);
+
+    /**
+     * Unregisters a context.
+     *
+     * @param key the context key to unregister
+     */
+    void unregisterContext(@NonNull String key);
+
+    /**
+     * Queries the current contexts for the given player.
+     *
+     * @param player the player
+     * @return the contexts
+     */
+    @NonNull Set<Context> queryContexts(@NonNull Player player);
 
 }

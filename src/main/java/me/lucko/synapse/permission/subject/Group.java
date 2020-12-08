@@ -25,7 +25,7 @@
 
 package me.lucko.synapse.permission.subject;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a group.
@@ -37,7 +37,6 @@ public interface Group extends PermissionSubject, MetadataSubject {
      *
      * @return the name of the group
      */
-    @Nonnull
-    String getName();
+    @NonNull String getName();
 
 }

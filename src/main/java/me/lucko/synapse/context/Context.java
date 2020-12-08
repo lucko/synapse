@@ -23,9 +23,11 @@
  *  SOFTWARE.
  */
 
-package me.lucko.synapse.permission.context;
+package me.lucko.synapse.context;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Objects;
 
 /**
  * Represents a context pairing.
@@ -38,19 +40,30 @@ public interface Context {
     String WORLD_KEY = "world";
 
     /**
+     * Creates a new {@link Context}.
+     *
+     * @param key the key
+     * @param value the value
+     * @return the context
+     */
+    static @NonNull Context of(@NonNull String key, @NonNull String value) {
+        Objects.requireNonNull(key, "key");
+        Objects.requireNonNull(value, "value");
+        return new ContextImpl(key, value);
+    }
+
+    /**
      * Gets the contexts key
      *
      * @return the key
      */
-    @Nonnull
-    String getKey();
+    @NonNull String key();
 
     /**
      * Gets the contexts value
      *
      * @return the value
      */
-    @Nonnull
-    String getValue();
+    @NonNull String value();
 
 }

@@ -26,11 +26,11 @@
 package me.lucko.synapse.util;
 
 import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.concurrent.Future;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 /**
  * Represents the result of an action which may have no yet been fully applied.
@@ -49,10 +49,8 @@ public interface FutureResult<T> {
      *
      * @param plugin a plugin instance to use when running the callback
      * @param callback the callback
-     * @return this result (for chaining)
      */
-    @Nonnull
-    FutureResult whenComplete(@Nonnull Plugin plugin, @Nonnull FutureCallback<T> callback);
+    void whenComplete(@NonNull Plugin plugin, @NonNull Consumer<T> callback);
 
     /**
      * Blocks the current thread until the action has completed.
@@ -61,15 +59,13 @@ public interface FutureResult<T> {
      *
      * @return the result
      */
-    @Nullable
-    T join();
+    @Nullable T join();
 
     /**
-     * Encapsulates this {@link FutureResult} as a {@link Future}.
+     * Encapsulates this {@link FutureResult} as a {@link CompletableFuture}.
      *
      * @return a future
      */
-    @Nonnull
-    Future<T> asFuture();
+    @NonNull CompletableFuture<T> asFuture();
 
 }

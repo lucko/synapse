@@ -25,13 +25,10 @@
 
 package me.lucko.synapse.permission.subject;
 
-import me.lucko.synapse.permission.context.Context;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.Set;
 import java.util.UUID;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Represents a player and their permissions data
@@ -43,33 +40,20 @@ public interface User extends PermissionSubject, MetadataSubject {
      *
      * @return the uuid
      */
-    @Nonnull
-    UUID getUniqueId();
+    @NonNull UUID getUniqueId();
 
     /**
      * Gets the players username, if known.
      *
      * @return the username
      */
-    @Nullable
-    String getUsername();
+    @Nullable String getUsername();
 
     /**
      * Gets the players "primary" group, if they have one.
      *
      * @return the players primary group
      */
-    @Nullable
-    Group getPrimaryGroup();
-
-    /**
-     * Gets the players "primary" group in a given set of contexts,
-     * if they have one.
-     *
-     * @param contexts the contexts to check in
-     * @return the players primary group
-     */
-    @Nullable
-    Group getPrimaryGroup(Set<Context> contexts);
+    @Nullable Group getPrimaryGroup();
 
 }

@@ -23,43 +23,33 @@
  *  SOFTWARE.
  */
 
-package me.lucko.synapse.util;
+package me.lucko.synapse.permission.options;
 
-import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.concurrent.CompletableFuture;
+final class PropertyImpl<T> implements Property<T> {
+    private final String name;
+    private final T defaultValue;
 
-/**
- * Represents the result of an action which may have no yet been fully applied.
- */
-public interface FutureAction {
+    PropertyImpl(String name, T defaultValue) {
+        this.name = name;
+        this.defaultValue = defaultValue;
+    }
 
-    /**
-     * Attaches a completion callback to this {@link FutureAction}.
-     *
-     * <p>If the action is already complete, the runnable will be called immediately.</p>
-     *
-     * <p>If it is not complete, the runnable will be called synchronously using
-     * the Bukkit scheduler when the action is completed.</p>
-     *
-     * @param plugin a plugin instance to use when running the callback
-     * @param runnable the runnable
-     */
-    void whenComplete(@NonNull Plugin plugin, @NonNull Runnable runnable);
+    @Override
+    public @NonNull String name() {
+        return this.name;
+    }
 
-    /**
-     * Blocks the current thread until the action has completed.
-     *
-     * <p>This method should only be called from an async task!</p>
-     */
-    void join();
+    @Override
+    public T defaultValue() {
+        return this.defaultValue;
+    }
 
-    /**
-     * Encapsulates this {@link FutureAction} as a {@link CompletableFuture}.
-     *
-     * @return a future
-     */
-    @NonNull CompletableFuture<Void> asFuture();
+    @Override
+    public String toString() {
+        return "Property{name=" + name +", defaultValue=" + defaultValue + '}';
+    }
 
+    // use system equality for #equals and #hashcode
 }
