@@ -26,6 +26,7 @@
 package me.lucko.synapse.permission.subject;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Represents a group.
@@ -38,5 +39,13 @@ public interface Group extends PermissionSubject, MetadataSubject {
      * @return the name of the group
      */
     @NonNull String getName();
+
+    /**
+     * Gets the display name of the group, if it has one that differs from its
+     * {@link #getName() normal name}.
+     *
+     * @return the group display name
+     */
+    @Nullable String getDisplayName();
 
 }

@@ -82,6 +82,7 @@ public abstract class AbstractPermissionService<U, G> implements PermissionServi
     protected abstract @NonNull CompletableFuture<Void> userSetMetadata(@NonNull U user, @NonNull String key, @Nullable String value, @NonNull PropertyExtractor properties);
 
     protected abstract @NonNull String groupGetName(G group);
+    protected abstract @Nullable String groupGetDisplayName(G group);
     protected abstract @NonNull Collection<PermissionNode> groupGetPermissions(@NonNull G group);
     protected abstract @NonNull Collection<GroupMembership> groupGetGroupMemberships(@NonNull G group);
     protected abstract boolean groupCheckPermission(@NonNull G group, @NonNull String permission);
@@ -287,6 +288,11 @@ public abstract class AbstractPermissionService<U, G> implements PermissionServi
         @Override
         public @NonNull String getName() {
             return AbstractPermissionService.this.groupGetName(this.group);
+        }
+
+        @Override
+        public @Nullable String getDisplayName() {
+            return AbstractPermissionService.this.groupGetDisplayName(this.group);
         }
 
         @Override
