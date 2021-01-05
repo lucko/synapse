@@ -49,6 +49,6 @@ class AbstractPropertyQueryable implements PropertyQueryable {
     @SuppressWarnings("unchecked")
     @Override
     public <T> @Nullable T queryProperty(@NonNull Property<T> property) {
-        return (T) this.properties.get(property);
+        return (T) this.properties.getOrDefault(property, property.defaultValue());
     }
 }
