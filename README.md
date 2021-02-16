@@ -1,6 +1,59 @@
 # synapse
 
-API for interacting with Bukkit permission plugins.
+A work-in-progress API for interacting with Bukkit permission plugins.
+
+### Aims
+
+* **Intuitive**: the API should be easy for less experienced programmers to understand (no more than Bukkit itself is).
+* **Flexible**: permission plugins support concepts such as expiry times and contexts to varying extents (e.g. not at all, or only for certain things - users only, not for prefixes). The API should elegantly accommodate both ends of the scale.
+* **Simple**: aim to satisfy 80% of use-cases, not absolutely everything.
+
+### Design decisions
+
+These aren't set in stone, just what I've done so far.
+
+#### Async friendly, but not with CompletableFutures
+
+The API is written with consideration that some operations will require database queries and therefore should not be executed on the main thread. The idiomatic thing to do would be to return a `CompletableFuture` from these methods. 
+
+However, in my experience, the learning curve for CompletableFuture is too steep for most users (especially those that are less experienced with Java and/or concurrent programming).
+
+Instead, synapse "wraps" CompletableFuture with its own interfaces.
+
+```java
+public interface FutureAction {
+    void whenComplete(Plugin plugin, Runnable callback);
+    void join();
+    CompletableFuture<Void> asFuture();
+}
+
+public interface FutureResult<T> {
+    void whenComplete(Plugin plugin, Consumer<? super T> callback);
+    T join();
+    CompletableFuture<T> asFuture();
+}
+```
+
+These interfaces provide the most common use-cases:
+* run a callback on the main thread once complete (takes `Plugin` as a parameter to run the callback via the Bukkit scheduler)
+* block until complete (if on an async thread already)
+
+#### Tied to Bukkit, not platform agnostic
+
+Maybe this is a mistake, but at the moment it has two advantages:
+
+1. synapse methods can accept `Player` parameters - this keeps things simple for users, and prevents mistakes. (not a huge deal I suppose, but it's nice to have)
+2. Means we can support the `whenComplete` methods on the wrapper Future as mentioned above.
+
+I'm open to changing this, but we'd need to find an acceptable alternative to points 1 & (especially) 2 above.
+
+#### Property system
+
+The `Property` API is my attempt at solving the **flexible** aim. ("permission plugins support concepts such as expiry times and contexts to varying extents (e.g. not at all, or only for certain things - users only, not for prefixes). The API should elegantly accommodate both ends of the scale")
+
+It's not perfect (and could maybe use a better name), but I think it works. There are some examples below, so you decide for yourself. :)
+
+The `PermissionService` interface has a method to check which properties are supported for certain operations, and the `PropertyBuilder` has similar methods too. This allows users to decide how to react when the level of support for a certain feature (property) differs.
 
 ### Example usage
 
