@@ -33,7 +33,6 @@ import me.lucko.synapse.permission.subject.SubjectType;
 import me.lucko.synapse.permission.subject.User;
 import me.lucko.synapse.util.FutureResult;
 
-import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -57,20 +56,6 @@ public interface PermissionService extends GenericService {
      */
     interface Users {
         /**
-         * Gets a {@link User} instance for an online player.
-         *
-         * <p>May throw an exception if the player is {@link Player#isOnline() not
-         * online}.</p>
-         *
-         * <p>Permission plugins will <b>always</b> return a result for online
-         * players.</p>
-         *
-         * @param player the player
-         * @return a user
-         */
-        @NonNull User get(@NonNull Player player);
-
-        /**
          * Gets a {@link User} instance for a given unique id.
          *
          * <p>Permission plugins will <b>always</b> return a result for online
@@ -78,7 +63,6 @@ public interface PermissionService extends GenericService {
          *
          * @param uniqueId the unique id of the player to lookup
          * @return a user, or null if one could not be retrieved
-         * @see Player#getUniqueId()
          */
         @Nullable User get(@NonNull UUID uniqueId);
 

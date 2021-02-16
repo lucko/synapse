@@ -30,8 +30,6 @@ import me.lucko.synapse.permission.node.PermissionNode;
 import me.lucko.synapse.permission.property.PropertyBuilder;
 import me.lucko.synapse.util.FutureAction;
 
-import org.bukkit.permissions.Permissible;
-import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collection;
@@ -72,9 +70,8 @@ public interface PermissionSubject {
      * <p>Unlike all other methods in this interface, this method <b>should</b>
      * account for inheritance rules.</p>
      *
-     * <p>The result should be as accurate as calling
-     * {@link Permissible#hasPermission(String)}, and return the same result in
-     * most cases.</p>
+     * <p>The result should be as accurate as calling {@code hasPermission}, and
+     * return the same result in most cases.</p>
      *
      * @param permission the permission
      * @return the result of the check
@@ -90,7 +87,7 @@ public interface PermissionSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param permission the permission
      * @return a future result
@@ -105,7 +102,7 @@ public interface PermissionSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param permission the permission
      * @param properties the properties to set the permission with
@@ -119,7 +116,7 @@ public interface PermissionSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param permission the permission
      * @return a future result
@@ -136,7 +133,7 @@ public interface PermissionSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param group the group
      * @return a future result
@@ -152,7 +149,7 @@ public interface PermissionSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param group the group
      * @param properties the properties to add the group with
@@ -166,7 +163,7 @@ public interface PermissionSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param group the group
      * @return a future result

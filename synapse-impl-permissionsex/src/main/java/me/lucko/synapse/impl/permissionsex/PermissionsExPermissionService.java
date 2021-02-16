@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 public class PermissionsExPermissionService extends AbstractPermissionService<PermissionUser, PermissionGroup> {
     private static final Method GET_DATA_METHOD;
@@ -92,6 +93,11 @@ public class PermissionsExPermissionService extends AbstractPermissionService<Pe
     }
 
     @Override
+    protected @NonNull Executor getSyncExecutor() {
+        return runnable -> this.pex.getServer().getScheduler().runTask(this.pex, runnable);
+    }
+
+    @Override
     public boolean supportsProperty(@NonNull SubjectType typeScope, @NonNull PropertyScope scope, @NonNull Property<?> property) {
         switch (scope) {
             case PERMISSION:
@@ -108,11 +114,6 @@ public class PermissionsExPermissionService extends AbstractPermissionService<Pe
             default:
                 throw new AssertionError("unknown scope: " + scope);
         }
-    }
-
-    @Override
-    protected @NonNull PermissionUser getUser(@NonNull Player player) {
-        return this.pex.getPermissionsManager().getUser(player);
     }
 
     @Override

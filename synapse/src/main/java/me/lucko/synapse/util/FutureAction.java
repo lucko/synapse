@@ -25,7 +25,6 @@
 
 package me.lucko.synapse.util;
 
-import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -38,15 +37,12 @@ public interface FutureAction {
     /**
      * Attaches a completion callback to this {@link FutureAction}.
      *
-     * <p>If the action is already complete, the runnable will be called immediately.</p>
+     * <p>The runnable will be called synchronously using the scheduler when the action
+     * is completed.</p>
      *
-     * <p>If it is not complete, the runnable will be called synchronously using
-     * the Bukkit scheduler when the action is completed.</p>
-     *
-     * @param plugin a plugin instance to use when running the callback
-     * @param runnable the runnable
+     * @param callback the callback
      */
-    void whenComplete(@NonNull Plugin plugin, @NonNull Runnable runnable);
+    void whenComplete(@NonNull Runnable callback);
 
     /**
      * Blocks the current thread until the action has completed.

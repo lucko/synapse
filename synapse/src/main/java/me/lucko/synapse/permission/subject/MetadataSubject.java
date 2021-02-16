@@ -28,7 +28,6 @@ package me.lucko.synapse.permission.subject;
 import me.lucko.synapse.permission.property.PropertyBuilder;
 import me.lucko.synapse.util.FutureAction;
 
-import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -79,7 +78,7 @@ public interface MetadataSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param prefix the prefix to set, or null to remove any current prefix
      * @return a future result
@@ -94,7 +93,7 @@ public interface MetadataSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param prefix the prefix to set, or null to remove any current prefix
      * @param properties the properties to set the prefix with
@@ -111,7 +110,7 @@ public interface MetadataSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param suffix the suffix to set, or null to remove any current suffix
      * @return a future result
@@ -126,7 +125,7 @@ public interface MetadataSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param suffix the suffix to set, or null to remove any current suffix
      * @param properties the properties to set the suffix with
@@ -143,7 +142,7 @@ public interface MetadataSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param key the metadata key
      * @param value the value
@@ -159,7 +158,7 @@ public interface MetadataSubject {
      * <p>The result of this action may not apply immediately, and the change
      * may be applied asynchronously. If you want to wait until the action has
      * been fully applied, pass a callback using
-     * {@link FutureAction#whenComplete(Plugin, Runnable)}.</p>
+     * {@link FutureAction#whenComplete(Runnable)}.</p>
      *
      * @param key the metadata key
      * @param value the value

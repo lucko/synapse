@@ -38,15 +38,16 @@ import java.util.function.Function;
 
 public class CompletableFutureResult<T> implements FutureResult<T> {
     private final CompletableFuture<T> future;
+    private final Executor executor;
 
-    public CompletableFutureResult(CompletableFuture<T> future) {
+    public CompletableFutureResult(CompletableFuture<T> future, Executor executor) {
         this.future = future;
+        this.executor = executor;
     }
 
     @Override
-    public void whenComplete(@NonNull Plugin plugin, @NonNull Consumer<? super T> callback) {
-        Executor executor = r -> plugin.getServer().getScheduler().runTask(plugin, r);
-        this.future.thenAcceptAsync(callback, executor);
+    public void whenComplete(@NonNull Consumer<? super T> callback) {
+        this.future.thenAcceptAsync(callback, this.executor);
     }
 
     @Override

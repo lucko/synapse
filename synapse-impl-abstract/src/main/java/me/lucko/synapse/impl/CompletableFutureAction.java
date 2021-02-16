@@ -27,7 +27,6 @@ package me.lucko.synapse.impl;
 
 import me.lucko.synapse.util.FutureAction;
 
-import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -35,15 +34,16 @@ import java.util.concurrent.Executor;
 
 public class CompletableFutureAction implements FutureAction {
     private final CompletableFuture<?> future;
+    private final Executor executor;
 
-    public CompletableFutureAction(CompletableFuture<?> future) {
+    public CompletableFutureAction(CompletableFuture<?> future, Executor executor) {
         this.future = future;
+        this.executor = executor;
     }
 
     @Override
-    public void whenComplete(@NonNull Plugin plugin, @NonNull Runnable runnable) {
-        Executor executor = r -> plugin.getServer().getScheduler().runTask(plugin, r);
-        this.future.thenRunAsync(runnable, executor);
+    public void whenComplete(@NonNull Runnable runnable) {
+        this.future.thenRunAsync(runnable, this.executor);
     }
 
     @Override
