@@ -38,6 +38,11 @@ public class PropertyExtractor {
     }
 
     @SuppressWarnings("unchecked")
+    public <T> T get(Property<T> property) {
+        return (T) this.properties.getOrDefault(property, property.defaultValue());
+    }
+
+    @SuppressWarnings("unchecked")
     public <T> PropertyExtractor extract(Property<T> property, Consumer<T> value) {
         Object val = this.properties.get(property);
         if (val != null) {

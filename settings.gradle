@@ -1,3 +1,3 @@
 rootProject.name = 'synapse-parent'
 
-include 'synapse', 'synapse-impl-abstract'
+include 'synapse', 'synapse-impl-abstract', 'synapse-impl-permissionsex'

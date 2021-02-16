@@ -44,7 +44,7 @@ public class CompletableFutureResult<T> implements FutureResult<T> {
     }
 
     @Override
-    public void whenComplete(@NonNull Plugin plugin, @NonNull Consumer<T> callback) {
+    public void whenComplete(@NonNull Plugin plugin, @NonNull Consumer<? super T> callback) {
         Executor executor = r -> plugin.getServer().getScheduler().runTask(plugin, r);
         this.future.thenAcceptAsync(callback, executor);
     }

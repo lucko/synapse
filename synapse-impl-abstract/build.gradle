@@ -4,8 +4,3 @@ dependencies {
     compile 'org.bukkit:bukkit:1.15.2-R0.1-SNAPSHOT'
     compile 'org.checkerframework:checker-qual:3.8.0'
 }
-
-repositories {
-    mavenCentral()
-    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-}

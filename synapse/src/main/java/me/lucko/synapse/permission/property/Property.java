@@ -26,6 +26,7 @@
 package me.lucko.synapse.permission.property;
 
 import me.lucko.synapse.context.Context;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 

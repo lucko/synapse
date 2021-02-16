@@ -50,7 +50,7 @@ public interface FutureResult<T> {
      * @param plugin a plugin instance to use when running the callback
      * @param callback the callback
      */
-    void whenComplete(@NonNull Plugin plugin, @NonNull Consumer<T> callback);
+    void whenComplete(@NonNull Plugin plugin, @NonNull Consumer<? super T> callback);
 
     /**
      * Blocks the current thread until the action has completed.

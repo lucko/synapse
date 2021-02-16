@@ -27,6 +27,7 @@ package me.lucko.synapse.permission.subject;
 
 import me.lucko.synapse.permission.property.PropertyBuilder;
 import me.lucko.synapse.util.FutureAction;
+
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

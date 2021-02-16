@@ -29,6 +29,7 @@ import me.lucko.synapse.permission.membership.GroupMembership;
 import me.lucko.synapse.permission.node.PermissionNode;
 import me.lucko.synapse.permission.property.PropertyBuilder;
 import me.lucko.synapse.util.FutureAction;
+
 import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;

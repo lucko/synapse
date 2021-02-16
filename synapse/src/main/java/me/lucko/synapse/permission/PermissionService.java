@@ -27,9 +27,12 @@ package me.lucko.synapse.permission;
 
 import me.lucko.synapse.GenericService;
 import me.lucko.synapse.permission.property.Property;
+import me.lucko.synapse.permission.property.PropertyScope;
 import me.lucko.synapse.permission.subject.Group;
+import me.lucko.synapse.permission.subject.SubjectType;
 import me.lucko.synapse.permission.subject.User;
 import me.lucko.synapse.util.FutureResult;
+
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -134,11 +137,13 @@ public interface PermissionService extends GenericService {
     }
 
     /**
-     * Gets if the service supports the property.
+     * Gets if the service supports the property in the given scope.
      *
+     * @param typeScope the type of the subject
+     * @param scope the scope
      * @param property the property
      * @return if the service supports the property
      */
-    boolean supportsProperty(@NonNull Property<?> property);
+    boolean supportsProperty(@NonNull SubjectType typeScope, @NonNull PropertyScope scope, @NonNull Property<?> property);
 
 }

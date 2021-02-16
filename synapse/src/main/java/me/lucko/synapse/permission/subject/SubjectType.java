@@ -23,42 +23,21 @@
  *  SOFTWARE.
  */
 
-package me.lucko.synapse.context;
-
-import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.Objects;
+package me.lucko.synapse.permission.subject;
 
 /**
- * Represents a context pairing.
+ * The type of a {@link PermissionSubject}.
  */
-public interface Context {
+public enum SubjectType {
 
     /**
-     * Creates a new {@link Context}.
-     *
-     * @param key the key
-     * @param value the value
-     * @return the context
+     * A {@link User}.
      */
-    static @NonNull Context of(@NonNull String key, @NonNull String value) {
-        Objects.requireNonNull(key, "key");
-        Objects.requireNonNull(value, "value");
-        return new ContextImpl(key, value);
-    }
+    USER,
 
     /**
-     * Gets the contexts key
-     *
-     * @return the key
+     * A {@link Group}.
      */
-    @NonNull String key();
-
-    /**
-     * Gets the contexts value
-     *
-     * @return the value
-     */
-    @NonNull String value();
+    GROUP
 
 }

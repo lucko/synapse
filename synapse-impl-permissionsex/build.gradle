@@ -1,0 +1,14 @@
+dependencies {
+    compile project(':synapse-impl-abstract')
+
+    compileOnly('ru.tehkode:PermissionsEx:1.23.5') {
+        exclude(module: 'bukkit')
+        exclude(module: 'updater')
+        exclude(module: 'commons-dbcp')
+        exclude(module: 'AccountsClient')
+    }
+}
+
+repositories {
+    maven { url = 'https://repo.lucko.me/' }
+}

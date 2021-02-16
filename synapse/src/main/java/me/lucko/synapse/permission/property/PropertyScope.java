@@ -23,42 +23,38 @@
  *  SOFTWARE.
  */
 
-package me.lucko.synapse.context;
+package me.lucko.synapse.permission.property;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import me.lucko.synapse.permission.subject.Group;
+import me.lucko.synapse.permission.subject.MetadataSubject;
+import me.lucko.synapse.permission.subject.PermissionSubject;
 
-import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
- * Represents a context pairing.
+ * The scope a {@link Property} is able to apply in.
  */
-public interface Context {
+public enum PropertyScope {
 
     /**
-     * Creates a new {@link Context}.
-     *
-     * @param key the key
-     * @param value the value
-     * @return the context
+     * For {@link PermissionSubject#setPermission(String, Consumer)}.
      */
-    static @NonNull Context of(@NonNull String key, @NonNull String value) {
-        Objects.requireNonNull(key, "key");
-        Objects.requireNonNull(value, "value");
-        return new ContextImpl(key, value);
-    }
+    PERMISSION,
 
     /**
-     * Gets the contexts key
-     *
-     * @return the key
+     * For {@link PermissionSubject#addGroup(Group, Consumer)}.
      */
-    @NonNull String key();
+    GROUP_MEMBERSHIP,
 
     /**
-     * Gets the contexts value
-     *
-     * @return the value
+     * For {@link MetadataSubject#setPrefix(String, Consumer)} or
+     * {@link MetadataSubject#setSuffix(String, Consumer)}.
      */
-    @NonNull String value();
+    PREFIX_OR_SUFFIX,
+
+    /**
+     * For {@link MetadataSubject#setMetadata(String, String, Consumer)}
+     */
+    METADATA
 
 }

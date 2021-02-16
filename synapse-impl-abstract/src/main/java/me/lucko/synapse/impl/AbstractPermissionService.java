@@ -30,7 +30,9 @@ import me.lucko.synapse.permission.membership.GroupMembership;
 import me.lucko.synapse.permission.node.PermissionNode;
 import me.lucko.synapse.permission.property.Property;
 import me.lucko.synapse.permission.property.PropertyBuilder;
+import me.lucko.synapse.permission.property.PropertyScope;
 import me.lucko.synapse.permission.subject.Group;
+import me.lucko.synapse.permission.subject.SubjectType;
 import me.lucko.synapse.permission.subject.User;
 import me.lucko.synapse.util.FutureAction;
 import me.lucko.synapse.util.FutureResult;
@@ -160,12 +162,12 @@ public abstract class AbstractPermissionService<U, G> implements PermissionServi
         }
     }
 
-    private Map<Property<?>, Object> getProperties(Consumer<PropertyBuilder> properties) {
+    private Map<Property<?>, Object> getProperties(SubjectType type, PropertyScope scope, Consumer<PropertyBuilder> properties) {
         Map<Property<?>, Object> props = new HashMap<>();
         properties.accept(new PropertyBuilder() {
             @Override
             public boolean supports(@NonNull Property<?> property) {
-                return AbstractPermissionService.this.supportsProperty(property);
+                return AbstractPermissionService.this.supportsProperty(type, scope, property);
             }
 
             @Override
@@ -222,7 +224,7 @@ public abstract class AbstractPermissionService<U, G> implements PermissionServi
 
         @Override
         public @NonNull FutureAction setPermission(@NonNull String permission, @NonNull Consumer<PropertyBuilder> properties) {
-            PropertyExtractor props = new PropertyExtractor(getProperties(properties));
+            PropertyExtractor props = new PropertyExtractor(getProperties(SubjectType.USER, PropertyScope.PERMISSION, properties));
             return new CompletableFutureAction(AbstractPermissionService.this.userSetPermission(this.user, permission, props));
         }
 
@@ -234,7 +236,7 @@ public abstract class AbstractPermissionService<U, G> implements PermissionServi
 
         @Override
         public @NonNull FutureAction addGroup(@NonNull Group group, @NonNull Consumer<PropertyBuilder> properties) {
-            PropertyExtractor props = new PropertyExtractor(getProperties(properties));
+            PropertyExtractor props = new PropertyExtractor(getProperties(SubjectType.USER, PropertyScope.GROUP_MEMBERSHIP, properties));
             return new CompletableFutureAction(AbstractPermissionService.this.userAddGroup(this.user, group.getName(), props));
         }
 
@@ -261,19 +263,19 @@ public abstract class AbstractPermissionService<U, G> implements PermissionServi
 
         @Override
         public @NonNull FutureAction setPrefix(@Nullable String prefix, @NonNull Consumer<PropertyBuilder> properties) {
-            PropertyExtractor props = new PropertyExtractor(getProperties(properties));
+            PropertyExtractor props = new PropertyExtractor(getProperties(SubjectType.USER, PropertyScope.PREFIX_OR_SUFFIX, properties));
             return new CompletableFutureAction(AbstractPermissionService.this.userSetPrefix(this.user, prefix, props));
         }
 
         @Override
         public @NonNull FutureAction setSuffix(@Nullable String suffix, @NonNull Consumer<PropertyBuilder> properties) {
-            PropertyExtractor props = new PropertyExtractor(getProperties(properties));
+            PropertyExtractor props = new PropertyExtractor(getProperties(SubjectType.USER, PropertyScope.PREFIX_OR_SUFFIX, properties));
             return new CompletableFutureAction(AbstractPermissionService.this.userSetSuffix(this.user, suffix, props));
         }
 
         @Override
         public @NonNull FutureAction setMetadata(@NonNull String key, @Nullable String value, @NonNull Consumer<PropertyBuilder> properties) {
-            PropertyExtractor props = new PropertyExtractor(getProperties(properties));
+            PropertyExtractor props = new PropertyExtractor(getProperties(SubjectType.USER, PropertyScope.METADATA, properties));
             return new CompletableFutureAction(AbstractPermissionService.this.userSetMetadata(this.user, key, value, props));
         }
     }
@@ -312,7 +314,7 @@ public abstract class AbstractPermissionService<U, G> implements PermissionServi
 
         @Override
         public @NonNull FutureAction setPermission(@NonNull String permission, @NonNull Consumer<PropertyBuilder> properties) {
-            PropertyExtractor props = new PropertyExtractor(getProperties(properties));
+            PropertyExtractor props = new PropertyExtractor(getProperties(SubjectType.GROUP, PropertyScope.PERMISSION, properties));
             return new CompletableFutureAction(AbstractPermissionService.this.groupSetPermission(this.group, permission, props));
         }
 
@@ -324,7 +326,7 @@ public abstract class AbstractPermissionService<U, G> implements PermissionServi
 
         @Override
         public @NonNull FutureAction addGroup(@NonNull Group group, @NonNull Consumer<PropertyBuilder> properties) {
-            PropertyExtractor props = new PropertyExtractor(getProperties(properties));
+            PropertyExtractor props = new PropertyExtractor(getProperties(SubjectType.GROUP, PropertyScope.GROUP_MEMBERSHIP, properties));
             return new CompletableFutureAction(AbstractPermissionService.this.groupAddGroup(this.group, group.getName(), props));
         }
 
@@ -351,19 +353,19 @@ public abstract class AbstractPermissionService<U, G> implements PermissionServi
 
         @Override
         public @NonNull FutureAction setPrefix(@Nullable String prefix, @NonNull Consumer<PropertyBuilder> properties) {
-            PropertyExtractor props = new PropertyExtractor(getProperties(properties));
+            PropertyExtractor props = new PropertyExtractor(getProperties(SubjectType.GROUP, PropertyScope.PREFIX_OR_SUFFIX, properties));
             return new CompletableFutureAction(AbstractPermissionService.this.groupSetPrefix(this.group, prefix, props));
         }
 
         @Override
         public @NonNull FutureAction setSuffix(@Nullable String suffix, @NonNull Consumer<PropertyBuilder> properties) {
-            PropertyExtractor props = new PropertyExtractor(getProperties(properties));
+            PropertyExtractor props = new PropertyExtractor(getProperties(SubjectType.GROUP, PropertyScope.PREFIX_OR_SUFFIX, properties));
             return new CompletableFutureAction(AbstractPermissionService.this.groupSetSuffix(this.group, suffix, props));
         }
 
         @Override
         public @NonNull FutureAction setMetadata(@NonNull String key, @Nullable String value, @NonNull Consumer<PropertyBuilder> properties) {
-            PropertyExtractor props = new PropertyExtractor(getProperties(properties));
+            PropertyExtractor props = new PropertyExtractor(getProperties(SubjectType.GROUP, PropertyScope.METADATA, properties));
             return new CompletableFutureAction(AbstractPermissionService.this.groupSetMetadata(this.group, key, value, props));
         }
     }
